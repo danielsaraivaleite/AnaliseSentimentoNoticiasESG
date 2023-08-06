@@ -1,1 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Análise de Sentimento de Notícias sobre Empresas Brasileiras</title>
+    <style>
+        /* Estilos para o layout moderno */
+        body {
+            font-family: Arial, sans-serif;
+        }
 
+        #menu {
+            background-color: #f2f2f2;
+            padding: 10px;
+        }
+
+        #search-form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        #search-input {
+            width: 400px;
+            padding: 5px;
+        }
+
+        #search-button {
+            padding: 5px 10px;
+        }
+
+        #checkboxes {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <form id="search-form" method="POST">
+            <label for="search-input">Empresa:</label>
+            <input type="text" id="search-input" name="empresa">
+            <input type="submit" id="search-button" value="Buscar">
+        </form>
+        <div id="checkboxes">
+            <input type="checkbox" id="considerar-titulos" name="considerar_titulos" checked>
+            <label for="considerar-titulos">Considerar apenas títulos</label>
+
+            <input type="checkbox" id="busca-rapida" name="busca_rapida" checked>
+            <label for="busca-rapida">Busca rápida</label>
+
+            <input type="checkbox" id="buscar-historico" name="busca_historico">
+            <label for="buscar-historico">Buscar apenas no histórico já carregado</label>
+        </div>
+    </div>
+
+    {% if tabela %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Empresa</th>
+                    <th>Considerar Títulos</th>
+                    <th>Busca Rápida</th>
+                    <th>Buscar no Histórico</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in tabela %}
+                    <tr>
+                        <td>{{ row['Empresa'] }}</td>
+                        <td>{{ row['Considerar Títulos'] }}</td>
+                        <td>{{ row['Busca Rápida'] }}</td>
+                        <td>{{ row['Buscar no Histórico'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <img src="{{ url_for('static', filename='images/graph.png') }}" alt="Gráfico">
+    {% endif %}
+</body>
+</html>
