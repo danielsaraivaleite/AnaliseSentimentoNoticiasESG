@@ -11,6 +11,15 @@ O tema ESG (“Environmental, Social and Governance”) vem ganhando importânci
 Este trabalho teve natureza empírica e prática, realizando-se a implementação na linguagem Python  dos algoritmos computacionais propostos. O ambiente escolhido para edição do código foi o Jupyter Notebook , presente no pacote Anaconda  para Ciência de Dados. Todos os códigos e bases de dados coletadas e produzidas foram disponibilizados de forma pública em repositório da plataforma Github .
 Em linhas gerais, o trabalho dividiu-se em 5 etapas: pesquisa bibliográfica, coleta dos dados, construção do algoritmo de análise de sentimento para o Português, aplicação do algoritmo e construção e cálculo do “score ESG” calculado a partir da análise de sentimentos. 
 
+## Funcionamento do algoritmo
+O algoritmo tem a seguinte lógica e passos:
+
+- As notícias foram previamente coletadas de diversas fontes, utilizando o GoogleNews. Foram selecionadas apenas as notícias que continham termos relacionados aos assuntos ESG
+- São excluídos textos que versavam sobre mais de uma empresa.
+- Cada notícia é classificada entre em uma das dimensões - E, S ou G - de acordo com a maior ocorrência de termos.
+- É aplicada uma versão adaptada e enriquecida para o Português do algoritmo VADER. Este algoritmo utiliza um conjunto de heuristicas e um grande léxico para determinar o sentimento de cada texto, atribuindo um score (polaridade), que vai de -1 (mais negativo) até +1 (mais positivo). Ao redor de 0, o sentimento é considerado neutro.
+- É calculada uma curva de polaridade média para cada empresa no tempo, representando o sentimento médio das notícias. A curva é tratada com o modelo de média móvel EWMA.
+
 ## Versão funcional
 
 A versão funcional do projeto pode ser acessada em: https://esgnewssentiment.pythonanywhere.com
