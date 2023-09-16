@@ -1,15 +1,18 @@
-# coding: utf-8
-# Author: C.J. Hutto
-# Adaptação portugues Daniel Saraiva Leite 2023
+'''
+FORK do projeto VADER e sua adaptação ao Portugues
 
+Fonte: https://github.com/cjhutto/vaderSentiment
+ 
+Projeto Análise de sentimentos sobre notícias do tema ESG
+Trabalho de conclusão de curso - MBA Digital Business USP Esalq
 
-
-"""
+Comentarios do autor:
 If you use the VADER sentiment analysis tools, please cite:
 Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for
 Sentiment Analysis of Social Media Text. Eighth International Conference on
 Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.
-"""
+'''
+
 import os
 import re
 import math
@@ -681,8 +684,6 @@ class SentimentIntensityAnalyzer(object):
 if __name__ == '__main__':
     pass
 
-
-# In[7]:
 
 
 # teste

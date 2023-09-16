@@ -1,3 +1,10 @@
+'''
+Módulo que trata a busca das noticias dos temas ESG no Google, e suas transformações e processamentos
+Autor: Daniel Saraiva Leite - 2023
+Projeto Análise de sentimentos sobre notícias do tema ESG
+Trabalho de conclusão de curso - MBA Digital Business USP Esalq
+'''
+
 import warnings
 import numpy as np
 import pandas as pd
@@ -12,29 +19,51 @@ arquivo_termos_esg = 'datasets/palavras_chave_esg.xlsx'
 base_noticias = 'datasets/base_noticias.xlsx'
 
 
-'''
-Obtem relação de empresas listadas na B3
-'''
+
 def recupera_lista_empresas_B3():
+    '''
+    Obtem relação de empresas listadas na B3
+    Fonte: dadosdemercado.com.br
+    '''
     df = pd.read_html('https://www.dadosdemercado.com.br/bolsa/acoes')[0].loc[:, ['Código', 'Nome']].sort_values(by='Nome')
 
+    # adicoes para comparar com merco
+    new_row = {'Código':'Boticário', 'Nome': 'Grupo Boticário' }
+    df = df.append(new_row, ignore_index=True)
+    
+    new_row = {'Código':'Avon', 'Nome': 'Avon' }
+    df = df.append(new_row, ignore_index=True)
+    
+    new_row = {'Código':'Nubank', 'Nome': 'Nubank' }
+    df = df.append(new_row, ignore_index=True)    
+    
     df = pd.merge(left=df, right=pd.read_excel('datasets/EscoreB3.xlsx'), on='Código', how='left')
     
     df['Nome'] = df['Nome'].replace('AMER3', 'Lojas Americanas')
+    df['Nome'] = df['Nome'].apply(lambda x : 'Lojas Americanas' if x == 'Americanas' else x)
+    
     df['Nome'] = df['Nome'].replace('VBBR3', 'VIBRA ENERGIA S.A.')
     df['Nome'] = df['Nome'].replace('RaiaDrogasil', 'Raia Drogasil')
+    df['Nome'] = df['Nome'].replace('Transmissão Paulista', 'CTEEP')
+    df['Nome'] = df['Nome'].replace('Siderúrgica Nacional', 'CSN')
+    df['Nome'] = df['Nome'].replace('IGTA3', 'Iguatemi')
+    
+    df['Nome'] = df['Nome'].apply(lambda x : 'Aeris' if x == 'Aeris Energy' else x)
+    
+    
+    # retira sa
+    df['Nome'] = df['Nome'].replace(' S. A.', '')
+   
     
     df.to_excel('datasets/lista_empresas.xlsx')
     
+    return df
 
-    
-    return df[df['Nome'] != 'B3']
-
-
-'''
-Busca as noticias do google 
-'''
 def busca_noticias_google_periodo(termo, atualiza=False, ultima_data=None):
+    '''
+    Busca as noticias do google , por periodo, realizando divisao por tempo para poder carregar mais de 100 noticias
+    Isso é necessario pela limitacao da API que retorna no maximo 100 noticias
+    '''
     
     if not atualiza:
         df = busca_noticias_google_news(termo, '')  # busca sem data
@@ -53,7 +82,6 @@ def busca_noticias_google_periodo(termo, atualiza=False, ultima_data=None):
         else:
             df = busca_noticias_google_news(palavras=termo)
             
-          
             
     if len(df) > 0:
 
@@ -67,13 +95,16 @@ def busca_noticias_google_periodo(termo, atualiza=False, ultima_data=None):
 
 
 
-'''
-Busca notícias de uma empresa relacionadas ao tema ESG
-'''
+
 def busca_noticias_google_esg(empresa_pesquisada, atualiza=False, ultima_data=None):
+    '''
+    Busca as noticias do google 
+    '''
     dfTermos = pd.read_excel(arquivo_termos_esg)
     
     empresa_pesquisada_aju = empresa_pesquisada.replace(' ', '+')
+    empresa_pesquisada_aju = empresa_pesquisada.replace('&', '%26')
+
 
     dfESG = busca_noticias_google_periodo(empresa_pesquisada_aju + '+ESG', atualiza, ultima_data)
 
@@ -91,10 +122,11 @@ def busca_noticias_google_esg(empresa_pesquisada, atualiza=False, ultima_data=No
     
     return dfESG
 
-'''
-Filtra determinados sites
-'''
+
 def filtra_noticias_sites_especificos(noticias):
+    '''
+    Filtra determinados sites na busca
+    '''
     df = noticias
     df = df[df['fonte'].str['href'].str.contains('xpi.')==False]
     df = df[df['fonte'].str['href'].str.contains('estrategiaconcursos')==False]
@@ -103,14 +135,22 @@ def filtra_noticias_sites_especificos(noticias):
     df = df[df['fonte'].str['href'].str.contains('portogente')==False]
     df = df[df['fonte'].str['href'].str.contains('stj.')==False]
     df = df[df['fonte'].str['href'].str.contains('pcb.')==False]
+    df = df[df['fonte'].str['href'].str.contains('tre.')==False]
+    df = df[df['fonte'].str['href'].str.contains('boatos.org')==False]
+    
+    # tira portugal e europa
+    df = df[df['fonte'].str['href'].str.endswith('.pt')==False]
+    df = df[df['fonte'].str['href'].str.endswith('.eu')==False]
+    
 
     return df
 
-'''
-Faz o scrapping de cada noticias utilizando biblioteca 
-https://newspaper.readthedocs.io/en/latest/
-'''
-def recupera_noticias_completas(noticias, apenas_titulos):
+
+def recupera_noticias_completas(noticias, apenas_titulos=False):
+    '''
+    Faz o scrapping de cada noticias utilizando biblioteca 
+    https://newspaper.readthedocs.io/en/latest/
+    '''
     
     import pandas as pd
     from newspaper import Article 
@@ -141,10 +181,11 @@ def recupera_noticias_completas(noticias, apenas_titulos):
     return df
 
 
-'''
-Processa as noticias de uma empresa de acordo com o processo descrito neste trabalho
-'''
+
 def processa_busca_empresa(empresa, dfEmpresasListadas, atualiza=False, apenas_titulos=False):
+    '''
+    Processa as noticias de uma empresa de acordo com o processo descrito neste trabalho
+    '''
     #print('Buscando noticia empresa ' + empresa + ' ' + str(dt.datetime.now()))
     df = busca_noticias_google_esg(empresa, atualiza)
     #print('recuperando texto noticia empresa ' + empresa + ' ' + str(dt.datetime.now()))
@@ -156,7 +197,6 @@ def processa_busca_empresa(empresa, dfEmpresasListadas, atualiza=False, apenas_t
             df = filtra_citacao_relevante(df, empresa, dfEmpresasListadas )
         #print('classifica texto noticia empresa ' + empresa + ' ' + str(dt.datetime.now()))
         df = classifica_textos_coletados(df, apenas_titulos)
-        #df = filtra_noticias_sem_classificacao(df, empresa)
         #print('fim texto noticia empresa ' + empresa + ' ' + str(dt.datetime.now()))
     return df  
 

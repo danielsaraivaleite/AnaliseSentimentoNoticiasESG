@@ -1,6 +1,13 @@
-# codigo usado para gerar um timeline com as notícias
-# ver fontes referenciadas
+'''
+Módulo de grafico de timeline das noticias
 
+Fontes para esse codigo:
+https://stackoverflow.com/questions/35091557/replace-nth-occurrence-of-substring-in-string
+https://dadoverflow.com/2021/08/17/making-timelines-with-python/
+
+Projeto Análise de sentimentos sobre notícias do tema ESG
+Trabalho de conclusão de curso - MBA Digital Business USP Esalq
+'''
 
 import matplotlib.pyplot as plt
 from datetime import date
@@ -22,6 +29,9 @@ def ajusta_labels(labels):
 
 
 def plota_timeline(dates, labels, titulo, arquivo=''):
+    '''
+    Plota o timeline
+    '''
     # codigo adaptado de: https://dadoverflow.com/2021/08/17/making-timelines-with-python/
 
     if len(dates) == 0:

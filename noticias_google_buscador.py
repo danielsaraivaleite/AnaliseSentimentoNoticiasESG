@@ -1,5 +1,12 @@
-#Fonte:https://github.com/ranahaani/GNews/blob/8591313e3fdaaf44e2e09f2265254fc3aaea8b56/gnews/utils/utils.py#L69
-# codigo adaptado para permitir busca por tempo, por Daniel Saraiva Leite
+'''
+Este módulo implementa a busca de notícias no Google
+O código foi adaptado de forma praticamente integral da seguinte fonte;
+Fonte:https://github.com/ranahaani/GNews/blob/8591313e3fdaaf44e2e09f2265254fc3aaea8b56/gnews/utils/utils.py#L69
+
+A nossa adaptação foi principalmente para permitir a busca no tempo
+Projeto Análise de sentimentos sobre notícias do tema ESG
+Trabalho de conclusão de curso - MBA Digital Business USP Esalq
+'''
 
 import logging
 import os
@@ -232,6 +239,16 @@ def processar_site_noticia_buscado(item):
 url = 'https://news.google.com/rss/search?q={}&hl=pt-BR&gl=BR&ceid=BR:pt-419'
 
 def busca_noticias_google_news(palavras, data_limite='', after=False):
+    '''
+    Realiza a busca das noticias no Google
+            Parameters:
+                    palavras (string): palavras a buscar
+                    data_limite (string): Data maxima a buscar em formato AAAA-MM-DD
+                    after (string): Data minima a buscar em formato AAAA-MM-DD
+
+            Returns:
+                    dataframe (pd.DataFrame): noticias encontradas
+    '''
     
     q = palavras
     

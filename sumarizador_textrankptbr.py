@@ -1,10 +1,16 @@
-
-# Fonte: https://github.com/summanlp/textrank
 '''
+Módulo que implementa a chamada ao sumarizador TextRank para o Portugues
+Fonte da implementação: https://github.com/summanlp/textrank
+    
+Artigo dos autores
 Mihalcea, R., Tarau, P.: "Textrank: Bringing order into texts". 
 In: Lin, D., Wu, D. (eds.) Proceedings of EMNLP 2004. pp. 404–411. 
 Association for Computational Linguistics, Barcelona, Spain. July 2004.
+    
+Projeto Análise de sentimentos sobre notícias do tema ESG
+Trabalho de conclusão de curso - MBA Digital Business USP Esalq'
 '''
+
 
 from summa import summarizer
 import pandas as pd
@@ -37,11 +43,11 @@ def split_text_to_pandas(text):
     return df
         
 
-'''
-Sumariza o texto
-'''
+
 def summarize_text_rank(text, compression=0.8, include_first_parag=True):
-    
+    '''
+    Sumariza o texto
+    '''
     dfTexto = split_text_to_pandas(text)
     
     if len(text) < 30 or len(dfTexto) < 7:
@@ -83,10 +89,8 @@ def summarize_text_rank(text, compression=0.8, include_first_parag=True):
         return sumario
 
 
-# In[4]:
 
 
-# teste
 def teste_textrank():
 
     texto = '''A Ambev anunciou que quer zerar emissões de carbono de toda sua cadeia de valor até 2040. A meta envolve os escopos 1, 2 e 3, ou seja, emissões que a própria empresa produz, aquelas geradas de maneira indireta pela aquisição de energia e aquelas emitidas pelos demais terceiros que fazem parte da cadeia produtiva da companhia.
