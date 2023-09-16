@@ -26,4 +26,18 @@ O algoritmo tem a seguinte lógica e passos:
 
 ![image](https://github.com/danielsaraivaleite/AnaliseSentimentoNoticiasESG/assets/131724461/0f577fee-58e1-4bc6-9480-938da02e692d)
 
-	
+### Construção do classificador ESG (com aprendizado de máquina)
+
+![image](https://github.com/danielsaraivaleite/AnaliseSentimentoNoticiasESG/assets/131724461/60d20a11-1bba-4107-bc15-5fda517dce5f)
+
+### Adaptação do algortimo do VADER ao português
+
+![image](https://github.com/danielsaraivaleite/AnaliseSentimentoNoticiasESG/assets/131724461/0027eafd-a894-44f1-b798-86d3a439ecc0)
+
+### Validação do algortimo do VADER com outras fontes de dados
+
+![image](https://github.com/danielsaraivaleite/AnaliseSentimentoNoticiasESG/assets/131724461/b55f17a8-a63b-463f-87f6-12e76fe290c6)
+
+### Aplicação da análise de sentimento às notícias ESG e resultados
+
+![image](https://github.com/danielsaraivaleite/AnaliseSentimentoNoticiasESG/assets/131724461/781b339d-0edc-496f-8450-a3c9477186ac)
